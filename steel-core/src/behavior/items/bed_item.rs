@@ -7,7 +7,7 @@ use crate::behavior::context::{BlockPlaceContext, InteractionResult, UseOnContex
 use crate::behavior::items::BlockItem;
 
 /// Behavior for beds
-#[item_behavior]
+// TODO remove and delete this before fully 26.3
 pub struct BedItem {
     #[json_arg(vanilla_blocks, json = "block")]
     _block: BlockRef,

@@ -15,6 +15,7 @@ use steel_utils::Identifier;
 
 mod attributes;
 mod basic_components;
+mod block_transformer;
 mod builder;
 mod consumables;
 mod kinetic;
@@ -26,6 +27,7 @@ use basic_components::{
     block_state_component_token, blocks_attacks_component_token, fireworks_component_token,
     food_component_token,
 };
+use block_transformer::{block_transformer_component_token, pottery_pattern_component_token};
 use builder::{generate_builder_calls, get_craft_remainder};
 use consumables::{consumable_component_token, death_protection_component_token};
 use kinetic::kinetic_weapon_component_token;

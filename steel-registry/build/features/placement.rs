@@ -59,6 +59,19 @@ pub(super) fn generate_block_predicate(predicate: &BlockPredicate) -> TokenStrea
             let offset = generate_offset(offset);
             quote! { BlockPredicate::InsideWorldBounds { offset: #offset } }
         }
+        BlockPredicate::HeightRange {
+            min_inclusive,
+            max_inclusive,
+        } => {
+            let min_inclusive = super::generate_vertical_anchor(*min_inclusive);
+            let max_inclusive = super::generate_vertical_anchor(*max_inclusive);
+            quote! {
+                BlockPredicate::HeightRange {
+                    min_inclusive: #min_inclusive,
+                    max_inclusive: #max_inclusive,
+                }
+            }
+        }
     }
 }
 
@@ -191,6 +204,18 @@ pub(super) fn generate_placement_modifier(modifier: &PlacementModifier) -> Token
                 PlacementModifier::RandomOffset {
                     xz_spread: #xz_spread,
                     y_spread: #y_spread,
+                }
+            }
+        }
+        PlacementModifier::Offset { x, y, z } => {
+            let x = generate_int_provider(x);
+            let y = generate_int_provider(y);
+            let z = generate_int_provider(z);
+            quote! {
+                PlacementModifier::Offset {
+                    x: #x,
+                    y: #y,
+                    z: #z,
                 }
             }
         }

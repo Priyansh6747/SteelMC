@@ -16,21 +16,34 @@ struct ParticleTypeEntry {
 }
 
 #[derive(Deserialize)]
-#[serde(rename_all = "snake_case")]
 enum ParticleOptionsType {
+    #[serde(rename = "SimpleParticleOptions")]
     Simple,
+    #[serde(rename = "BlockParticleOption")]
     Block,
+    #[serde(rename = "ColorParticleOption")]
     Color,
+    #[serde(rename = "DustParticleOptions")]
     Dust,
+    #[serde(rename = "DustColorTransitionOptions")]
     DustColorTransition,
+    #[serde(rename = "GeyserParticleOptions")]
     Geyser,
+    #[serde(rename = "GeyserBaseParticleOptions")]
     GeyserBase,
+    #[serde(rename = "PowerParticleOption")]
     Power,
+    #[serde(rename = "SpellParticleOption")]
     Spell,
+    #[serde(rename = "ItemParticleOption")]
     Item,
+    #[serde(rename = "SculkChargeParticleOptions")]
     SculkCharge,
+    #[serde(rename = "ShriekParticleOption")]
     Shriek,
+    #[serde(rename = "TrailParticleOption")]
     Trail,
+    #[serde(rename = "VibrationParticleOption")]
     Vibration,
 }
 

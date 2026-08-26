@@ -188,6 +188,10 @@ pub(super) fn generate_configured_feature_kind(kind: &ConfiguredFeatureKind) -> 
         }
         ConfiguredFeatureKind::EndIsland => quote! { ConfiguredFeatureKind::EndIsland },
         ConfiguredFeatureKind::EndPlatform => quote! { ConfiguredFeatureKind::EndPlatform },
+        ConfiguredFeatureKind::EndPodium(config) => {
+            let active = config.active;
+            quote! { ConfiguredFeatureKind::EndPodium(EndPodiumConfiguration { active: #active }) }
+        }
         ConfiguredFeatureKind::EndSpike(config) => {
             let spikes = generate_vec(&config.spikes, generate_end_spike);
             let crystal_invulnerable = config.crystal_invulnerable;
@@ -395,6 +399,14 @@ pub(super) fn generate_configured_feature_kind(kind: &ConfiguredFeatureKind) -> 
                 })
             }
         }
+        ConfiguredFeatureKind::Overlay(config) => {
+            let features = generate_vec(&config.features, generate_placed_feature_ref);
+            quote! {
+                ConfiguredFeatureKind::Overlay(OverlayConfiguration {
+                    features: #features,
+                })
+            }
+        }
         ConfiguredFeatureKind::PointedDripstone(config) => {
             let chance_of_taller_dripstone = config.chance_of_taller_dripstone;
             let chance_of_directional_spread = config.chance_of_directional_spread;
@@ -426,6 +438,24 @@ pub(super) fn generate_configured_feature_kind(kind: &ConfiguredFeatureKind) -> 
                 ConfiguredFeatureKind::RandomSelector(RandomSelectorConfiguration {
                     features: #features,
                     default: #default,
+                })
+            }
+        }
+        ConfiguredFeatureKind::RandomNeighborSpread(config) => {
+            let block = generate_block_state_provider(&config.block);
+            let accepted_neighbors = generate_block_holder_set(&config.accepted_neighbors);
+            let can_replace = generate_block_predicate(&config.can_replace);
+            let attempts = generate_int_provider(&config.attempts);
+            let xz_offset = generate_int_provider(&config.xz_offset);
+            let y_offset = generate_int_provider(&config.y_offset);
+            quote! {
+                ConfiguredFeatureKind::RandomNeighborSpread(RandomNeighborSpreadConfiguration {
+                    block: #block,
+                    accepted_neighbors: #accepted_neighbors,
+                    can_replace: #can_replace,
+                    attempts: #attempts,
+                    xz_offset: #xz_offset,
+                    y_offset: #y_offset,
                 })
             }
         }
@@ -530,6 +560,22 @@ pub(super) fn generate_configured_feature_kind(kind: &ConfiguredFeatureKind) -> 
                 })
             }
         }
+        ConfiguredFeatureKind::SingleBlockPillar(config) => {
+            let block = generate_block_state_provider(&config.block);
+            let can_replace = generate_block_predicate(&config.can_replace);
+            let direction = generate_direction(config.direction);
+            let chance_to_continue = config.chance_to_continue;
+            let cap_feature = generate_option(&config.cap_feature, generate_placed_feature_ref);
+            quote! {
+                ConfiguredFeatureKind::SingleBlockPillar(SingleBlockPillarConfiguration {
+                    block: #block,
+                    can_replace: #can_replace,
+                    direction: #direction,
+                    chance_to_continue: #chance_to_continue,
+                    cap_feature: #cap_feature,
+                })
+            }
+        }
         ConfiguredFeatureKind::SimpleBlock(config) => {
             let to_place = generate_block_state_provider(&config.to_place);
             let schedule_tick = config.schedule_tick;
@@ -568,6 +614,22 @@ pub(super) fn generate_configured_feature_kind(kind: &ConfiguredFeatureKind) -> 
                 })
             }
         }
+        ConfiguredFeatureKind::ProjectedRandomPatchySquare(config) => {
+            let block = generate_block_state_provider(&config.block);
+            let project_through = generate_block_predicate(&config.project_through);
+            let size = generate_int_provider(&config.size);
+            let max_projection_height = config.max_projection_height;
+            quote! {
+                ConfiguredFeatureKind::ProjectedRandomPatchySquare(
+                    ProjectedRandomPatchySquareConfiguration {
+                        block: #block,
+                        project_through: #project_through,
+                        size: #size,
+                        max_projection_height: #max_projection_height,
+                    }
+                )
+            }
+        }
         ConfiguredFeatureKind::Spike(config) => {
             let state = generate_block_state_data(&config.state);
             let can_place_on = generate_block_predicate(&config.can_place_on);
@@ -593,6 +655,28 @@ pub(super) fn generate_configured_feature_kind(kind: &ConfiguredFeatureKind) -> 
                     rock_count: #rock_count,
                     hole_count: #hole_count,
                     valid_blocks: #valid_blocks,
+                })
+            }
+        }
+        ConfiguredFeatureKind::SteppedColumnCluster(config) => {
+            let block = generate_block_state_provider(&config.block);
+            let continue_through = generate_block_predicate(&config.continue_through);
+            let can_replace = generate_block_predicate(&config.can_replace);
+            let cannot_place_on = generate_block_holder_set(&config.cannot_place_on);
+            let cluster_reach = generate_int_provider(&config.cluster_reach);
+            let column_count = generate_int_provider(&config.column_count);
+            let column_reach = generate_int_provider(&config.column_reach);
+            let height = generate_int_provider(&config.height);
+            quote! {
+                ConfiguredFeatureKind::SteppedColumnCluster(SteppedColumnClusterConfiguration {
+                    block: #block,
+                    continue_through: #continue_through,
+                    can_replace: #can_replace,
+                    cannot_place_on: #cannot_place_on,
+                    cluster_reach: #cluster_reach,
+                    column_count: #column_count,
+                    column_reach: #column_reach,
+                    height: #height,
                 })
             }
         }

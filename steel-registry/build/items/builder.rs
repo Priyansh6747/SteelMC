@@ -1,16 +1,17 @@
 use super::{
     FromStr, Ident, Identifier, Item, Span, ToShoutySnakeCase, TokenStream, Value,
-    banner_pattern_ref_token, block_state_component_token, blocks_attacks_component_token,
-    component_i32, consumable_component_token, damage_type_ref_token,
-    death_protection_component_token, dye_color_token, entity_type_ref_token,
-    fireworks_component_token, food_component_token, generate_allowed_entities,
-    generate_attack_range_component, generate_attribute_modifiers_component,
-    generate_piercing_weapon_component, generate_tool_component, generate_weapon_component,
-    get_component_ident, holder_set_component_field, holder_set_token, identifier_token,
-    instrument_ref_token, item_name_component_token, item_ref_token, jukebox_song_ref_token,
-    kinetic_weapon_component_token, optional_identifier_token, quote, rarity_component_token,
-    sound_event_holder_token, sound_event_value_token, swing_animation_component_token,
-    trim_material_ref_token, use_effects_component_token,
+    banner_pattern_ref_token, block_state_component_token, block_transformer_component_token,
+    blocks_attacks_component_token, component_i32, consumable_component_token,
+    damage_type_ref_token, death_protection_component_token, dye_color_token,
+    entity_type_ref_token, fireworks_component_token, food_component_token,
+    generate_allowed_entities, generate_attack_range_component,
+    generate_attribute_modifiers_component, generate_piercing_weapon_component,
+    generate_tool_component, generate_weapon_component, get_component_ident,
+    holder_set_component_field, holder_set_token, identifier_token, instrument_ref_token,
+    item_name_component_token, item_ref_token, jukebox_song_ref_token,
+    kinetic_weapon_component_token, optional_identifier_token, pottery_pattern_component_token,
+    quote, rarity_component_token, sound_event_holder_token, sound_event_value_token,
+    swing_animation_component_token, trim_material_ref_token, use_effects_component_token,
 };
 
 /// Returns the crafting remainder item key for a given item, if any.
@@ -43,6 +44,21 @@ pub(super) fn generate_builder_calls(item: &Item) -> Vec<TokenStream> {
         let component_ident = get_component_ident(key);
 
         match key.as_str() {
+            "minecraft:block_transformer" => {
+                let transformer = block_transformer_component_token(value);
+                builder_calls.push(quote! {
+                    .builder_set(vanilla_components::BLOCK_TRANSFORMER, Some(#transformer))
+                });
+            }
+            "minecraft:provides_pottery_pattern" => {
+                let pottery_pattern = pottery_pattern_component_token(value);
+                builder_calls.push(quote! {
+                    .builder_set(
+                        vanilla_components::PROVIDES_POTTERY_PATTERN,
+                        Some(#pottery_pattern),
+                    )
+                });
+            }
             "minecraft:item_name" => {
                 item_name_component_token(value);
             }
@@ -394,15 +410,16 @@ pub(super) fn generate_builder_calls(item: &Item) -> Vec<TokenStream> {
                 });
             }
             "minecraft:pot_decorations" => {
-                let decorations = value
-                    .as_array()
-                    .unwrap_or_else(|| panic!("pot_decorations must be an item list, got {value}"));
+                let is_empty = value.as_object().is_some_and(serde_json::Map::is_empty)
+                    || value.as_array().is_some_and(|decorations| {
+                        decorations.len() == 4
+                            && decorations
+                                .iter()
+                                .all(|decoration| decoration.as_str() == Some("minecraft:brick"))
+                    });
                 assert!(
-                    decorations.len() == 4
-                        && decorations
-                            .iter()
-                            .all(|decoration| decoration.as_str() == Some("minecraft:brick")),
-                    "extracted decorated pot must use four brick placeholders"
+                    is_empty,
+                    "extracted decorated pot must be empty, got {value}"
                 );
                 builder_calls.push(quote! {
                     .builder_set(

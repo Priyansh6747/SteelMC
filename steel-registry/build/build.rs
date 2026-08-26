@@ -15,7 +15,6 @@
     clippy::nonminimal_bool,
     clippy::redundant_else,
     clippy::ref_option,
-    clippy::similar_names,
     clippy::too_many_lines,
     clippy::trivially_copy_pass_by_ref,
     clippy::unnecessary_debug_formatting,
@@ -37,6 +36,7 @@ mod chat_types;
 mod chicken_variants;
 mod cow_variants;
 mod damage_types;
+mod decorated_pot_patterns;
 mod dialogs;
 mod dimension_types;
 mod entities;
@@ -119,6 +119,7 @@ const VILLAGER_TYPES: &str = "villager_types";
 const VILLAGER_PROFESSIONS: &str = "villager_professions";
 const DIMENSIONS: &str = "dimension_types";
 const DAMAGE_TYPES: &str = "damage_types";
+const DECORATED_POT_PATTERNS: &str = "decorated_pot_patterns";
 const DAMAGE_TYPE_TAGS: &str = "damage_type_tags";
 const BANNER_PATTERN_TAGS: &str = "banner_pattern_tags";
 const ENTITY_TYPE_TAGS: &str = "entity_type_tags";
@@ -159,8 +160,8 @@ const STRUCTURES: &str = "structures";
 const STRUCTURE_PROCESSORS: &str = "structure_processors";
 const TEMPLATE_POOLS: &str = "template_pools";
 const WORLD_CLOCKS: &str = "world_clocks";
-const CARVERS: &str = "configured_carvers";
-const CONFIGURED_FEATURES: &str = "configured_features";
+const CARVERS: &str = "world_carvers";
+const FEATURES: &str = "configured_features";
 const PLACED_FEATURES: &str = "placed_features";
 const CUSTOM_STATS: &str = "custom_stats";
 
@@ -209,6 +210,7 @@ pub fn main() {
         (villager_professions::build(), VILLAGER_PROFESSIONS),
         (dimension_types::build(), DIMENSIONS),
         (damage_types::build(), DAMAGE_TYPES),
+        (decorated_pot_patterns::build(), DECORATED_POT_PATTERNS),
         (tags::damage_type(), DAMAGE_TYPE_TAGS),
         (jukebox_songs::build(), JUKEBOX_SONGS),
         (instruments::build(), INSTRUMENTS),
@@ -249,7 +251,7 @@ pub fn main() {
         (tags::enchantment(), ENCHANTMENT_TAGS),
         (enchantments::build(), ENCHANTMENTS),
         (carvers::build(), CARVERS),
-        (features::build_configured(), CONFIGURED_FEATURES),
+        (features::build_configured(), FEATURES),
         (features::build_placed(), PLACED_FEATURES),
         (custom_stats::build(), CUSTOM_STATS),
     ];

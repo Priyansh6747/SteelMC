@@ -42,7 +42,7 @@ use structures::{
     generate_weighted_random_placed_feature, generate_weighted_template_entry,
 };
 
-use data::{
+pub(super) use data::{
     AboveRootPlacement, BlobFoliagePlacer, BlockColumnLayer, BlockHolderSet, BlockPredicate,
     BlockStateData, BlockStateProvider, ConfiguredFeatureKind, ConfiguredFeatureRef,
     DualNoiseProvider, EndSpike, FeatureHeightmap, FeatureNoiseParameters, FeatureSize,
@@ -55,7 +55,7 @@ use data::{
 };
 
 pub(crate) fn build_configured() -> TokenStream {
-    let dir = "../steel-utils/build_assets/builtin_datapacks/minecraft/worldgen/configured_feature";
+    let dir = "../steel-utils/build_assets/builtin_datapacks/minecraft/worldgen/feature";
     println!("cargo:rerun-if-changed={dir}");
 
     let mut entries = Vec::new();

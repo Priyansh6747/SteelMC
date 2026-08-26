@@ -15,7 +15,7 @@ use crate::world::{
 use crate::behavior::blocks::redstone::java_hash::sort_small_map_positions;
 use crate::behavior::blocks::redstone::{MAX_REDSTONE_SIGNAL, MIN_REDSTONE_SIGNAL};
 
-/// Persistent evaluator used by `RedStoneWireBlock` when redstone experiments are disabled.
+/// Persistent evaluator used by `RedstoneWireBlock` when redstone experiments are disabled.
 pub(super) struct DefaultRedstoneWireEvaluator {
     wire_block: BlockRef,
 }

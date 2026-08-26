@@ -23,13 +23,13 @@ use crate::world::{
     LevelReader, ScheduledTickAccess, SignalQueryContext, World, is_redstone_conductor,
 };
 
-/// Vanilla `RedStoneWireBlock` using `DefaultRedstoneWireEvaluator`.
+/// Vanilla `RedstoneWireBlock` using `DefaultRedstoneWireEvaluator`.
 ///
 /// Steel intentionally does not implement the experimental redstone feature.
 /// Signal suppression is carried by [`SignalQueryContext`] instead of mutating
 /// vanilla's process-global `shouldSignal` field.
 #[block_behavior]
-pub struct RedStoneWireBlock {
+pub struct RedstoneWireBlock {
     block: BlockRef,
     cross_state: BlockStateId,
     evaluator: DefaultRedstoneWireEvaluator,
@@ -43,7 +43,7 @@ const POWER: &IntProperty = &BlockStateProperties::POWER;
 const SOUTH_REDSTONE: &EnumProperty<RedstoneSide> = &BlockStateProperties::SOUTH_REDSTONE;
 const WEST_REDSTONE: &EnumProperty<RedstoneSide> = &BlockStateProperties::WEST_REDSTONE;
 
-impl RedStoneWireBlock {
+impl RedstoneWireBlock {
     /// Creates the ordinary redstone-wire behavior and its persistent evaluator.
     #[must_use]
     pub fn new(block: BlockRef) -> Self {
@@ -281,7 +281,7 @@ impl RedStoneWireBlock {
     }
 }
 
-impl BlockBehavior for RedStoneWireBlock {
+impl BlockBehavior for RedstoneWireBlock {
     fn get_state_for_placement(&self, context: &BlockPlaceContext<'_>) -> Option<BlockStateId> {
         Some(self.get_connection_state(
             context.world.as_ref(),
@@ -545,10 +545,10 @@ mod tests {
     use crate::behavior::init_behaviors;
     use crate::test_support::TestLevel;
 
-    fn wire() -> RedStoneWireBlock {
+    fn wire() -> RedstoneWireBlock {
         init_vanilla_registry();
         init_behaviors();
-        RedStoneWireBlock::new(&vanilla_blocks::REDSTONE_WIRE)
+        RedstoneWireBlock::new(&vanilla_blocks::REDSTONE_WIRE)
     }
 
     #[test]
@@ -567,8 +567,8 @@ mod tests {
             pos,
         );
 
-        assert!(RedStoneWireBlock::is_cross(cross));
-        assert!(RedStoneWireBlock::is_dot(dot));
+        assert!(RedstoneWireBlock::is_cross(cross));
+        assert!(RedstoneWireBlock::is_dot(dot));
     }
 
     #[test]

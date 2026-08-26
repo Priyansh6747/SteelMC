@@ -32,7 +32,7 @@ impl SignalQueryContext {
 
     /// Returns a query context that excludes redstone-wire output.
     ///
-    /// Vanilla temporarily clears `RedStoneWireBlock.shouldSignal` while its
+    /// Vanilla temporarily clears `RedstoneWireBlock.shouldSignal` while its
     /// default evaluator measures power supplied by non-wire neighbors.
     pub(crate) const fn without_wire_signals() -> Self {
         Self {
